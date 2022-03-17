@@ -1,0 +1,29 @@
+mangal.cc
+
+void mangle_mangleContent(run_t* run, int speed_factor){
+
+    if (run->mutationsPerRun == 0U) {
+        return;
+    }
+
+    bool External = true;
+    if(External){
+        uint64_t Seed = util_rnd64();
+        MutateCall(run,Seed);
+    }else{
+        mangle_mangleContent_main(run,speed_factor);
+    }
+
+    wmb();
+}
+
+
+MakeFile:
+
+-lstdc++ 
+
+PROTOBUF_LIB=/usr/lib64/libprotobuf.so
+FUZZ_MUTATOR=libProtoMutator/libprotobuf_mutator.a
+LPM_LIB=/usr/local/lib/libprotobuf-mutator.a
+
+$(PROTOBUF_LIB) $(FUZZ_MUTATOR) $(LPM_LIB)
